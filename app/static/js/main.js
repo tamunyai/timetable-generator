@@ -1,7 +1,24 @@
+/**
+ * Counter for the number of lecturers added.
+ * @type {number}
+ */
 let lecturerCounter = 0;
+
+/**
+ * Counter for the number of programmes added.
+ * @type {number}
+ */
 let programmeCounter = 0;
+
+/**
+ * Counter for the number of modules added.
+ * @type {number}
+ */
 let moduleCounter = 0;
 
+/**
+ * Adds a new lecturer input field to the "lecturers-list" container.
+ */
 function addLecturer() {
   const lecturersList = document.getElementById("lecturers-list");
 
@@ -18,6 +35,10 @@ function addLecturer() {
   lecturerCounter++;
 }
 
+/**
+ * Removes a lecturer input field.
+ * @param {HTMLButtonElement} button - The button element clicked to trigger the removal.
+ */
 function removeLecturer(button) {
   const parentElement = button.parentElement.parentElement;
   const parentNode = parentElement.parentNode;
@@ -27,6 +48,9 @@ function removeLecturer(button) {
   }
 }
 
+/**
+ * Adds a new programme section to the "programmes-list" container.
+ */
 function addProgramme() {
   const programmesList = document.getElementById("programmes-list");
 
@@ -51,6 +75,10 @@ function addProgramme() {
   programmeCounter++;
 }
 
+/**
+ * Removes a programme section.
+ * @param {number} programmeId - The ID of the programme to remove.
+ */
 function removeProgramme(programmeId) {
   const programmeElement = document.getElementById(`programme-${programmeId}`);
   const parentNode = programmeElement.parentNode;
@@ -60,6 +88,10 @@ function removeProgramme(programmeId) {
   }
 }
 
+/**
+ * Adds a new module input field to a specific programme.
+ * @param {number} programmeId - The ID of the programme to which the module will be added.
+ */
 function addModule(programmeId) {
   const modulesContainer = document.getElementById(
     `modules-container-${programmeId}`,
@@ -88,6 +120,10 @@ function addModule(programmeId) {
   moduleCounter++;
 }
 
+/**
+ * Removes a module input field.
+ * @param {HTMLButtonElement} button - The button element clicked to trigger the removal.
+ */
 function removeModule(button) {
   const parentElement = button.parentElement;
   const parentNode = parentElement.parentNode;
@@ -97,5 +133,6 @@ function removeModule(button) {
   }
 }
 
+// Initialize with one lecturer and one programme
 addLecturer();
 addProgramme();
