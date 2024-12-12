@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %} <section id="index">
+    <header>
+        <div>
+            <p><strong>Site Under Construction:</strong> We're working hard to bring you an amazing experience. Please be patient as we finalize everything!</p>
+        </div>
+        <div>
+            <h1>Welcome to the JBS GL Bootcamp <strong>Group 15</strong> Final Project</h1>
+            <p>
+                The <strong>Timetable Generator</strong> is our final group project for the intensive <strong>Programming & GRIT Bootcamp</strong> offered by <strong>GRIT Lab Africa</strong>. This free training and mentoring program focuses on <span>problem-solving, algorithms, and introductory programming with Python</span>.
+            </p>
+            <p>
+                Through this project, we aim to provide an automated solution to create timetables for students, ensuring an efficient and easy way to manage class schedules.
+            </p>
+            <p>
+                Curious to learn more? <a href="{{ url_for('main.about') }}">Discover how this project came to life <span>→</span></a>
+            </p>
+        </div>
+    </header>
+
+    <div class="cta">
+        <p>Ready to create your timetable? Simply click the button below to start generating your personalized schedule.</p>
+        <a href="{{ url_for('main.timetable') }}" class="btn" role="button">Start Generating</a>
+    </div>
+</section> {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate Timetable{% endblock %}
+
+{% block content %} <section id="timetable">
+
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+    <form action="{{ url_for('main.timetable') }}" method="post">
+        <div id="lecturers-container">
+            <h2>Lecturers Management</h2>
+            <div id="lecturers-list">
+                <!-- Lecturers will be dynamically added here -->
+            </div>
+            <button onclick="addLecturer()" class="add-button">Add Lecturer</button>
+        </div>
+
+        <div id="programmes-container">
+            <h2>Degree Programmes</h2>
+            <div id="programmes-list">
+                <!-- Programmes will be dynamically added here -->
+            </div>
+            <button onclick="addProgramme()" class="add-button">Add Degree Programme</button>
+        </div>
+        
+        <div class="cta">
+            <button type="submit">Generate Timetable</button>
+        </div>
+    </form>
+</section> {% endblock %}

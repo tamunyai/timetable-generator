@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - Timetable Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('main.index') }}">
+                <h1>Timetable Generator</h1>
+            </a>
+            <div>
+                <a href="{{ url_for('main.timetable') }}">Timetable</a>
+                <a href="{{ url_for('main.about') }}">About</a>
+            </div>
+        </nav>
+    </header>
+    <main class="content">{% block content %}{% endblock %}</main>
+    <script src="{{ url_for('static', filename='js/main.js') }}" async defer></script>
+</body>
+</html>
