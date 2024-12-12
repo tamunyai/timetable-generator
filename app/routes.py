@@ -5,16 +5,37 @@ from flask import Blueprint, render_template, request
 
 from timetable_generator import DegreeProgram, Module, TimetableGenerator
 
+# Create the Blueprint for the 'main' routes
 main = Blueprint("main", __name__)
 
 
 @main.route("/")
 def index():
+    """
+    Renders the index page.
+
+    This route handles the display of the landing page for the application.
+
+    Returns:
+        flask.Response: The rendered index HTML template.
+    """
     return render_template("index.html")
 
 
 @main.route("/timetable", methods=["GET", "POST"])
 def timetable():
+    """
+    Generates and displays the timetable based on user input.
+
+    This route handles both the display of the timetable form and the logic for
+    generating the timetable. It processes lecturer names, programme information,
+    and modules based on POST data, and performs validation to ensure that input 
+    is correct. If valid, a timetable is generated using the TimetableGenerator class.
+
+    Returns:
+        flask.Response: The rendered timetable HTML template, with either 
+        an error message or the generated timetable.
+    """
     if request.method == "POST":
         try:
             lecturer_names = request.form.getlist("lecturer-name")
@@ -153,4 +174,13 @@ def timetable():
 
 @main.route("/about")
 def about():
+    """
+    Renders the about page.
+
+    This route displays information about the application, such as its purpose 
+    and the team behind the project.
+
+    Returns:
+        flask.Response: The rendered about HTML template.
+    """
     return render_template("about.html")
