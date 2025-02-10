@@ -1,25 +1,10 @@
 import pytest
 
-from app import create_app
+from app import app
 
 
 @pytest.fixture
-def app():
-    """
-    Fixture to create and return the Flask application instance.
-
-    This fixture initializes the Flask application using the create_app function.
-    It is used in the tests to provide the application context.
-
-    Returns:
-        Flask: The created Flask application instance.
-    """
-    app = create_app()
-    return app
-
-
-@pytest.fixture
-def client(app):
+def client():
     """
     Fixture to create and return a test client for the Flask application.
 

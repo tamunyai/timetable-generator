@@ -1,15 +1,15 @@
 import random
 import traceback
 
-from flask import Blueprint, render_template, request
+from flask import Flask, render_template, request
 
+from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 from timetable_generator import DegreeProgram, Module, TimetableGenerator
 
-# Create the Blueprint for the 'main' routes
-main = Blueprint("main", __name__)
+app = Flask(__name__)
 
 
-@main.route("/")
+@app.route("/")
 def index():
     """
     Renders the index page.
@@ -22,18 +22,18 @@ def index():
     return render_template("index.html")
 
 
-@main.route("/timetable", methods=["GET", "POST"])
+@app.route("/timetable", methods=["GET", "POST"])
 def timetable():
     """
     Generates and displays the timetable based on user input.
 
     This route handles both the display of the timetable form and the logic for
     generating the timetable. It processes lecturer names, programme information,
-    and modules based on POST data, and performs validation to ensure that input 
+    and modules based on POST data, and performs validation to ensure that input
     is correct. If valid, a timetable is generated using the TimetableGenerator class.
 
     Returns:
-        flask.Response: The rendered timetable HTML template, with either 
+        flask.Response: The rendered timetable HTML template, with either
         an error message or the generated timetable.
     """
     if request.method == "POST":
@@ -172,15 +172,19 @@ def timetable():
     return render_template("timetable.html")
 
 
-@main.route("/about")
+@app.route("/about")
 def about():
     """
     Renders the about page.
 
-    This route displays information about the application, such as its purpose 
+    This route displays information about the application, such as its purpose
     and the team behind the project.
 
     Returns:
         flask.Response: The rendered about HTML template.
     """
     return render_template("about.html")
+
+
+if __name__ == "__main__":
+    app.run(host=FLASK_HOST, port=FLASK_PORT, debug=FLASK_DEBUG)
