@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}View Timetable{% endblock %}
+
+{% block content %} <section class="section__timetable-view"> {% if timetable %}
+    {% for program, schedule in timetable.items() %} <h2>{{ program }}</h2>
+    
+    <table style="width: 100%; min-width: 700px;">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Module</th>
+                <th>Lecturer</th>
+                <th>Year</th>
+                <th>Units</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for session in schedule %} <tr>
+                <td style="border-bottom: solid; padding: 2px;">
+                    {{ session.day }}
+                </td>
+                <td style="border-bottom: solid; padding: 2px;">
+                    {{ session.start_time }} - {{ session.end_time }}
+                </td>
+                <td style="border-bottom: solid; padding: 2px;">
+                    {{ session.module_name }}
+                </td>
+                <td style="border-bottom: solid; padding: 2px;">
+                    {{ session.lecturer }}
+                </td>
+                <td style="border-bottom: solid; padding: 2px;">
+                    {{ session.year }}
+                </td>
+                <td style="border-bottom: solid; padding: 2px;">
+                    {{ session.units }}
+                </td>
+            </tr> {% endfor %}
+        </tbody>
+    </table> {% endfor %}
+{% endif %} </section> {% endblock %}
