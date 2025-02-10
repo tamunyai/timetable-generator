@@ -37,11 +37,11 @@ def test_index(client):
     assert response.status_code == 200
 
 
-def test_timetable(client):
+def test_create_timetable(client):
     """
-    Test the timetable route ("/timetable").
+    Test the timetable route ("/create_timetable").
 
-    This test sends a GET request to the timetable route ("/timetable") and checks
+    This test sends a GET request to the timetable route ("/create_timetable") and checks
     that the response status code is 200, indicating the page loads successfully.
 
     Args:
@@ -50,8 +50,24 @@ def test_timetable(client):
     Asserts:
         status_code (int): The HTTP status code of the response should be 200.
     """
-    response = client.get("/timetable")
+    response = client.get("/create_timetable")
     assert response.status_code == 200
+
+# def test_view_timetable(client):
+#     """
+#     Test the timetable route ("/view_timetable").
+
+#     This test sends a GET request to the timetable route ("/view_timetable") and checks
+#     that the response status code is 200, indicating the page loads successfully.
+
+#     Args:
+#         client (FlaskClient): The test client to simulate HTTP requests.
+
+#     Asserts:
+#         status_code (int): The HTTP status code of the response should be 200.
+#     """
+#     response = client.get("/view_timetable")
+#     assert response.status_code == 200
 
 
 def test_about(client):
@@ -69,3 +85,6 @@ def test_about(client):
     """
     response = client.get("/about")
     assert response.status_code == 200
+
+if __name__ == '__main__':
+    pytest.main()
