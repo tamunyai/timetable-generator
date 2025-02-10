@@ -25,9 +25,9 @@ function addLecturer() {
   const lecturerDiv = document.createElement("div");
   lecturerDiv.id = `lecturer-${lecturerCounter}`;
   lecturerDiv.innerHTML = `
-        <div class="lecture-row">
-            <input type="text" name="lecturer-name" placeholder="Lecturer Name" required>
-            <button onclick="removeLecturer(this)" class="remove-button">Remove</button>
+        <div class="lecturer__item">
+            <input type="text" name="lecturer-name" placeholder="Lecturer Name" class="lecturer__name" required>
+            <button onclick="removeLecturer(this)" class="lecturer__button-remove">Remove</button>
         </div>
     `;
 
@@ -58,14 +58,14 @@ function addProgramme() {
   programmeDiv.id = `programme-${programmeCounter}`;
   programmeDiv.className = "section";
   programmeDiv.innerHTML = `
-        <div>
-            <input type="text" name="programme-name" placeholder="Programme Name" id="programme-name-${programmeCounter}" required>
-            <button onclick="removeProgramme(${programmeCounter})" class="remove-button">Remove Programme</button>
+        <div class="programme__item">
+            <input type="text" name="programme-name" placeholder="Programme Name" id="programme-name-${programmeCounter}" class="programme__name" required>
+            <button onclick="removeProgramme(${programmeCounter})" class="programme__button-remove">Remove Programme</button>
         </div>
-        <div id="modules-container-${programmeCounter}">
+        <div class="modules__container" id="modules-container-${programmeCounter}">
             <!-- Modules will be added here -->
         </div>
-        <button onclick="addModule(${programmeCounter})" class="add-button">Add Module</button>
+        <button onclick="addModule(${programmeCounter})" class="module__button-add">Add Module</button>
     `;
 
   programmesList.appendChild(programmeDiv);
@@ -99,21 +99,21 @@ function addModule(programmeId) {
 
   const moduleDiv = document.createElement("div");
   moduleDiv.id = `module-${moduleCounter}`;
-  moduleDiv.className = "module-row";
+  moduleDiv.className = "module__item";
   moduleDiv.innerHTML = `
-        <input type="text" name="module-name-${programmeId}" placeholder="Module Name" required>
-        <select name="module-units-${programmeId}">
+        <input type="text" name="module-name-${programmeId}" placeholder="Module Name" class="module__name" required>
+        <select name="module-units-${programmeId}" class="module__units">
             <option value="2">2 Units</option>
             <option value="3">3 Units</option>
             <option value="4">4 Units</option>
         </select>
-        <select name="module-year-${programmeId}">
+        <select name="module-year-${programmeId}" class="module__year">
             <option value="1">Year 1</option>
             <option value="2">Year 2</option>
             <option value="3">Year 3</option>
             <option value="4">Year 4</option>
         </select>
-        <button onclick="removeModule(this)" class="remove-button">Remove</button>
+        <button onclick="removeModule(this)" class="module__button-remove">Remove</button>
     `;
 
   modulesContainer.appendChild(moduleDiv);
