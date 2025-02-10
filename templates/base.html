@@ -7,18 +7,41 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{{ url_for('index') }}">
+    <header class="header">
+        <div class="header__container">
+            <a href="{{ url_for('index') }}" class="nav__logo">
                 <h1>Timetable Generator</h1>
             </a>
-            <div>
-                <a href="{{ url_for('timetable') }}">Timetable</a>
-                <a href="{{ url_for('about') }}">About</a>
-            </div>
-        </nav>
+
+            <nav class="nav">
+                <div class="nav__container">
+                    <ul class="nav__list">
+                        <li class="nav__item">
+                            <a href="{{ url_for('create_timetable') }}" class="nav__link">Timetable</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="{{ url_for('about') }}" class="nav__link">About</a>
+                        </li>
+                    </ul>
+        
+                    <!-- <div class="nav__close" id="nav-close">
+                        <i class="ri-close-large-line nav__close-icon"></i>
+                    </div> -->
+        
+                    <div class="nav__social">
+                        <a href="https://github.com/tamunyai/timetable-generator" target="_blank" class="nav__social-link">
+                            <i class="ri-github-line nav__social-icon"></i>
+                            <span class="nav__social-text">GitHub</span>
+                        </a>
+                    </div>
+        
+                    <!-- <div class="nav__toggle" id="nav-toggle">
+                        <i class="ri-menu-line nav__toggle-icon"></i>
+                    </div> -->
+                </div>    
+            </nav>
+        </div>
     </header>
-    <main class="content">{% block content %}{% endblock %}</main>
-    <script src="{{ url_for('static', filename='js/main.js') }}" async defer></script>
+    <main class="main__container">{% block content %}{% endblock %}</main>
 </body>
 </html>
