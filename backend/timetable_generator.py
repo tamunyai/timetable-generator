@@ -48,12 +48,14 @@ class TimetableGenerator:
             num_lecturers = int(input("\nEnter the number of lecturers: "))
             if num_lecturers >= 8:  # Minimum needed for constraints
                 break
-            print("You need at least 8 lecturers to meet the teaching constraints.")
+            print(
+                "You need at least 8 lecturers to meet the teaching constraints."
+            )
 
         print("\nEnter lecturer names:")
         self.lecturers = set()
         for i in range(num_lecturers):
-            lecturer = input(f"Lecturer {i+1}: ")
+            lecturer = input(f"Lecturer {i + 1}: ")
             self.lecturers.add(lecturer)
 
         # Get degree programs
@@ -68,7 +70,7 @@ class TimetableGenerator:
         self.degree_programs = []
 
         for i in range(num_programs):
-            print(f"\nDegree Program {i+1}")
+            print(f"\nDegree Program {i + 1}")
             program_name = input("Enter program name: ")
 
             # Get modules for this program
@@ -78,7 +80,9 @@ class TimetableGenerator:
 
             while True:
                 num_modules = int(
-                    input(f"Enter number of modules for {program_name} (minimum 7): ")
+                    input(
+                        f"Enter number of modules for {program_name} (minimum 7): "
+                    )
                 )
                 if num_modules >= 7:
                     break
@@ -87,7 +91,7 @@ class TimetableGenerator:
             print(f"\nEnter module details for {program_name}:")
             for j in range(num_modules):
                 while True:
-                    print(f"\nModule {j+1}")
+                    print(f"\nModule {j + 1}")
                     module_name = input("Module name: ")
 
                     while True:
@@ -121,7 +125,9 @@ class TimetableGenerator:
                     break
 
                 # Automatically assign a lecturer to the current module
-                available_lecturers = self.get_available_lecturers(year, modules)
+                available_lecturers = self.get_available_lecturers(
+                    year, modules
+                )
                 if not available_lecturers:
                     print(
                         "No available lecturers for this module. Please adjust previous assignments."
@@ -132,7 +138,9 @@ class TimetableGenerator:
                 modules.append(Module(module_name, units, lecturer, year))
 
             if total_units < 16:
-                print(f"Total units ({total_units}) is less than minimum required (16)")
+                print(
+                    f"Total units ({total_units}) is less than minimum required (16)"
+                )
                 continue
 
             self.degree_programs.append(DegreeProgram(program_name, modules))
@@ -143,7 +151,9 @@ class TimetableGenerator:
         """Get available lecturers for a given year considering existing assignments"""
         # Get all the lecturers already assigned to this year
         assigned_to_year = {
-            module.lecturer for module in existing_modules if module.year == year
+            module.lecturer
+            for module in existing_modules
+            if module.year == year
         }
 
         # Get all the assigned years for each lecturer
@@ -183,7 +193,7 @@ class TimetableGenerator:
                 lecturer_schedules[module.lecturer].append((slot, module))
 
         for lecturer in lecturer_schedules:
-            # Check if a lecturer teaches in multiple years 
+            # Check if a lecturer teaches in multiple years
             years_taught = set(
                 module.year for _, module in lecturer_schedules[lecturer]
             )
@@ -192,14 +202,18 @@ class TimetableGenerator:
 
             # Check consecutive teaching hours
             sorted_schedule = sorted(
-                lecturer_schedules[lecturer], key=lambda x: (x[0].day, x[0].start_time)
+                lecturer_schedules[lecturer],
+                key=lambda x: (x[0].day, x[0].start_time),
             )
             consecutive_hours = 0
             last_end_time = None
 
             for slot, _ in sorted_schedule:
                 if last_end_time:
-                    if self.hours_difference(slot.start_time, last_end_time) < 1:
+                    if (
+                        self.hours_difference(slot.start_time, last_end_time)
+                        < 1
+                    ):
                         consecutive_hours += slot.duration
                         if consecutive_hours > 2:
                             return False
@@ -223,7 +237,9 @@ class TimetableGenerator:
 
             # Check each day's schedule
             for _, sessions in daily_schedule.items():
-                sorted_sessions = sorted(sessions, key=lambda x: x[0].start_time)
+                sorted_sessions = sorted(
+                    sessions, key=lambda x: x[0].start_time
+                )
 
                 for i in range(len(sorted_sessions) - 1):
                     current_end = sorted_sessions[i][0].start_time + timedelta(
@@ -251,7 +267,9 @@ class TimetableGenerator:
         slot1_end = slot1.start_time + timedelta(hours=slot1.duration)
         slot2_end = slot2.start_time + timedelta(hours=slot2.duration)
 
-        return not (slot1_end <= slot2.start_time or slot2_end <= slot1.start_time)
+        return not (
+            slot1_end <= slot2.start_time or slot2_end <= slot1.start_time
+        )
 
     def get_available_slots(self) -> List[TimeSlot]:
         """Generate all possible time slots"""
@@ -268,13 +286,17 @@ class TimetableGenerator:
                     continue
 
                 available_slots.append(
-                    TimeSlot(day, datetime.strptime(f"{current_hour}:00", "%H:%M"), 1)
+                    TimeSlot(
+                        day, datetime.strptime(f"{current_hour}:00", "%H:%M"), 1
+                    )
                 )
                 current_hour += 1
 
         return available_slots
 
-    def is_valid_slot(self, slot: TimeSlot, program_name: str, lecturer: str) -> bool:
+    def is_valid_slot(
+        self, slot: TimeSlot, program_name: str, lecturer: str
+    ) -> bool:
         """Check if a time slot is valid for a given program and lecturer"""
         # Check conflicts with program schedule
         for existing_slot, _ in self.timetable[program_name]:
@@ -284,8 +306,9 @@ class TimetableGenerator:
         # Check lecturer conflicts across all programs
         for _, schedule in self.timetable.items():
             for existing_slot, existing_module in schedule:
-                if existing_module.lecturer == lecturer and self.check_slot_conflict(
-                    slot, existing_slot
+                if (
+                    existing_module.lecturer == lecturer
+                    and self.check_slot_conflict(slot, existing_slot)
                 ):
                     return False
 
@@ -293,7 +316,9 @@ class TimetableGenerator:
 
     def generate_timetable(self) -> Dict[str, List[Tuple[TimeSlot, Module]]]:
         """Generate the timetable following all constraints"""
-        max_attempts = 50  # Maximum number of attempts to generate a valid timetable
+        max_attempts = (
+            50  # Maximum number of attempts to generate a valid timetable
+        )
         attempt = 0
 
         while attempt < max_attempts:
@@ -352,7 +377,9 @@ class TimetableGenerator:
                 print(f"Failed attempt {attempt}: {error}")
                 continue
 
-        raise ValueError("Failed to generate valid timetable after maximum attempts")
+        raise ValueError(
+            "Failed to generate valid timetable after maximum attempts"
+        )
 
     def display_timetable(self) -> None:
         """Display the generated timetable"""
@@ -395,7 +422,9 @@ class TimetableGenerator:
         for program in self.degree_programs:
             # Ensure each program has at least 7 modules
             if len(program.modules) < 7:
-                print(f"The program '{program.name}' must have at least 7 modules.")
+                print(
+                    f"The program '{program.name}' must have at least 7 modules."
+                )
                 return False
 
             # Check total units
@@ -409,7 +438,9 @@ class TimetableGenerator:
                 1 for module in program.modules if module.units == 4
             )
             if four_unit_courses > 2:
-                print(f"Too many 4-unit courses in {program.name}: {four_unit_courses}")
+                print(
+                    f"Too many 4-unit courses in {program.name}: {four_unit_courses}"
+                )
                 return False
 
         return True
