@@ -103,8 +103,12 @@ Ensure you have the following installed:
 
 - **Kamogelo Selepe** (Project Lead)
 - **Nobuhle Ndlovu** (Backend Developer)
-- **Amon Munyai** <[tamunyai](https://github.com/tamunyai)> (Frontend Developer)
+- **Amon Munyai** <[tamunyai](https://github.com/tamunyai)> (Frontend & Backend Developer)
 - **Njabulo Zulu** (Documentation & Research)
+
+## License
+
+This project is licensed under the [MIT License](license).
 
 ## Acknowledgements
 
