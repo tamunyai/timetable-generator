@@ -1,10 +1,6 @@
 # Timetable Generator
 
-A Python program that creates a semester lecture timetable for a university department.
-
-## Description
-
-The **Timetable Generator** is a Python-based tool that assists universities in creating semester lecture schedules for departments. The program ensures fair and efficient distribution of modules across various degree programmes and year groups, adhering to multiple constraints. This automation reduces manual work and minimizes potential scheduling errors.
+The **Timetable Generator** is a full-stack web application that assists universities in creating semester lecture schedules for departments. The system ensures fair and efficient distribution of modules across various degree programmes and year groups, adhering to multiple constraints. This automation reduces manual work and minimizes potential scheduling errors.
 
 ## Problem Statement
 
@@ -32,7 +28,7 @@ The **Timetable Generator** is a Python-based tool that assists universities in 
 
 1. **Module and Lecturer Allocation**:
 
-   - The program organizes modules across different year groups and ensures that no lecturer has back-to-back classes exceeding 2 hours without a break.
+   - The system organizes modules across different year groups and ensures that no lecturer has back-to-back classes exceeding 2 hours without a break.
 
    - Lecturers are assigned based on the modules and their availability while fulfilling teaching obligations (minimum 2 modules across different years).
 
@@ -48,39 +44,54 @@ The **Timetable Generator** is a Python-based tool that assists universities in 
 
    - Includes checks to prevent student schedules from having long gaps and ensures lecturer work is balanced with required breaks.
 
-### Sample Workflow
-
-1. **User Input**:
-
-   - At the start of the program, users are prompted to input necessary information such as module details, lecturer assignments, and degree programme specifics.
-
-2. **Timetable Generation**:
-
-   - The algorithm processes the input to create a schedule that meets all constraints.
-
-3. **Output**:
-
-   - A complete, readable timetable is displayed in the console.
-
 ## Getting Started
 
-### Language
+### Prerequisites
+
+Ensure you have the following installed:
 
 - Python 3.12.3
+- Node.js & npm
 
-### Running the Timetable Generator
+### Running the Backend
 
-Execute the script from the command line:
+1. Navigate to the backend directory:
 
-```bash
-python3 timetable_generator.py
-```
+   ```sh
+   cd backend
+   ```
 
-Follow the prompts to input data for the modules, lectures, and degree programmes.
+2. Install dependencies:
 
-### Example Results
+   ```sh
+   pip install -r requirements.txt
+   ```
 
-The output will display a timetable that adheres to the department's constraints, ensuring effective use of university resources and balanced schedules for lecturers and students.
+3. Run the Flask app:
+
+   ```sh
+   python app.py
+   ```
+
+### Running the Frontend
+
+1. Navigate to the frontend directory:
+
+   ```sh
+   cd frontend
+   ```
+
+2. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Start the React app:
+
+   ```sh
+   npm run dev
+   ```
 
 ## Future Enhancements
 
@@ -92,8 +103,12 @@ The output will display a timetable that adheres to the department's constraints
 
 - **Kamogelo Selepe** (Project Lead)
 - **Nobuhle Ndlovu** (Backend Developer)
-- **Amon Munyai** <[tamunyai](https://github.com/tamunyai)> (Frontend Developer)
+- **Amon Munyai** <[tamunyai](https://github.com/tamunyai)> (Frontend & Backend Developer)
 - **Njabulo Zulu** (Documentation & Research)
+
+## License
+
+This project is licensed under the [MIT License](license).
 
 ## Acknowledgements
 
