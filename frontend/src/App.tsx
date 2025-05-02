@@ -1,14 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { ViewTimetable, Home, CreateTimetable, About } from "./pages";
+import { CreateTimetable, Home, ViewTimetable } from "./pages";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/create_timetable" element={<CreateTimetable />} />
-        <Route path="/view_timetable" element={<ViewTimetable />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/create" element={<CreateTimetable />} />
+        <Route path="/view" element={<ViewTimetable />} />
       </Routes>
     </Router>
   );
