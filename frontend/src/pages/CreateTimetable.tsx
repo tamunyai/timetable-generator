@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "./Layout";
 import { Button } from "../components";
 import { useNavigate } from "react-router-dom";
+import { useRouteGuard } from "../contexts";
 
 interface Module {
   name: string;
@@ -19,6 +20,8 @@ const PROGRAMMES_KEY = "ttg_programmes";
 
 const CreateTimetable = () => {
   const navigate = useNavigate();
+  const { setCanView } = useRouteGuard();
+
   const [lecturers, setLecturers] = useState<string[]>([""]);
   const [programmes, setProgrammes] = useState<Programme[]>([
     { name: "", modules: [{ name: "", year: 1, units: 2 }] },
@@ -147,7 +150,7 @@ const CreateTimetable = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async () => {
+  const handleGenerate = async () => {
     setError(null);
     setIsLoading(true);
 
@@ -179,6 +182,7 @@ const CreateTimetable = () => {
       const data = await response.json();
 
       sessionStorage.setItem("timetable", JSON.stringify(data?.timetable));
+      setCanView(true);
       navigate("/view");
     } catch (err) {
       console.error(err);
@@ -295,11 +299,11 @@ const CreateTimetable = () => {
             />
           )}
           <Button
-            type="submit"
+            type="button"
             label="Generate Timetable"
             className="bg-black hover:bg-gray-700 text-white"
             disabled={!isFormValid}
-            onClick={handleSubmit}
+            onClick={handleGenerate}
           />
         </div>
       }

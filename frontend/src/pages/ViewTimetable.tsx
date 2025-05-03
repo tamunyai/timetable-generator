@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Layout from "./Layout";
 import { Button } from "../components";
+import { useRouteGuard } from "../contexts";
+import { useNavigate } from "react-router-dom";
 
 interface ModuleSlot {
   day: string;
@@ -17,9 +19,17 @@ interface TimetableData {
 }
 
 const ViewTimetable = () => {
+  const navigate = useNavigate();
+  const { canView } = useRouteGuard();
   const printRef = useRef<HTMLDivElement>(null);
 
   const [timetable, setTimetable] = useState<TimetableData>({});
+
+  useEffect(() => {
+    if (!canView) {
+      navigate("/create");
+    }
+  }, [canView, navigate]);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("timetable");
@@ -34,12 +44,12 @@ const ViewTimetable = () => {
     }
   };
 
-  return (
+  return canView ? (
     <Layout
       title="View Timetable"
       headerRight={
         <Button
-        onClick={handlePrint}
+          onClick={handlePrint}
           label={
             <div title="Print">
               <svg
@@ -80,7 +90,9 @@ const ViewTimetable = () => {
 
         {Object.entries(timetable).map(([program, slots]) => (
           <div key={program} className="mb-10 break-inside-avoid-page">
-            <h2 className="mb-4 font-semibold print:text-lg text-xl">{program}</h2>
+            <h2 className="mb-4 font-semibold print:text-lg text-xl">
+              {program}
+            </h2>
             <div className="overflow-x-auto">
               <table className="border border-gray-200 min-w-full print:text-xs text-sm print:border-collapse">
                 <thead className="bg-gray-100 print:bg-white text-left">
@@ -119,7 +131,7 @@ const ViewTimetable = () => {
         )}
       </section>
     </Layout>
-  );
+  ) : null;
 };
 
 export default ViewTimetable;
