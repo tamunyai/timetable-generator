@@ -14,3 +14,16 @@
 .bg-background {
   background-color: hsl(0, 0, 100%);
 }
+
+@keyframes infinite-scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(calc(-50% - 20px));
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 40s linear infinite;
+}
