@@ -81,7 +81,7 @@ const CreateTimetable = () => {
   const addProgramme = () => {
     const updatedProgrammes = [
       ...programmes,
-      { name: "", modules: [{ name: "", year: 1, units: 2 }] },
+      { name: "", modules: [{ name: "", year: NaN, units: NaN }] },
     ];
     setProgrammes(updatedProgrammes);
     sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
@@ -106,14 +106,6 @@ const CreateTimetable = () => {
 
   // Add module to a specific programme
   const addModule = (programmeIndex: number) => {
-    const currentModules = programmes[programmeIndex].modules;
-    const fourUnitCount = currentModules.filter((m) => m.units === 4).length;
-
-    if (fourUnitCount >= 2) {
-      alert("Only two 4-unit modules allowed per programme.");
-      return;
-    }
-
     const updatedProgrammes = [...programmes];
     updatedProgrammes[programmeIndex].modules.push({
       name: "",
