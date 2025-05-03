@@ -1,20 +1,32 @@
 import random
 from datetime import timedelta
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, render_template
 from flask_cors import CORS
+import os
 
 from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 from timetable_generator import DegreeProgram, Module, TimetableGenerator
 
-app = Flask(__name__, static_folder="../frontend/dist", static_url_path="/")
+app = Flask(
+    __name__,
+    static_folder="../frontend/dist",
+    template_folder="../frontend/dist",
+)
 CORS(app)
 
-@app.route("/")
-def serve_index():
-    return send_from_directory(app.static_folder, "index.html")
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react_app(path):
+    file_path = os.path.join(app.template_folder, path)
+    if path != "" and os.path.exists(file_path):
+        return send_from_directory(app.template_folder, path)
+
+    return render_template("index.html")
+
 
 @app.route("/api/generate", methods=["POST"])
-def create_timetable():
+def generate_timetable():
     """
     Generates a timetable based on user input received as JSON data.
 
