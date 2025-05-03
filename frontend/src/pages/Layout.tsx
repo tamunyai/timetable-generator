@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { Button } from "../components";
 
 type LayoutProps = {
   title?: string;
   children: React.ReactNode;
+  headerRight?: React.ReactNode;
 };
 
-const Layout: React.FC<LayoutProps> = ({ title, children }) => {
+const Layout: React.FC<LayoutProps> = ({ title, children, headerRight }) => {
   document.title = `${title ? title + " :: " : ""}Timetable Generator`;
 
   return (
@@ -33,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ title, children }) => {
           <span className="font-semibold text-lg">Timetable Generator</span>
         </Link>
 
-        {title === "Home" && <Button to="/create" />}
+        {headerRight && headerRight}
       </header>
 
       {children}
