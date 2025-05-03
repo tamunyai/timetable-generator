@@ -101,7 +101,7 @@ Ensure you have the following installed:
 
 ## Authors
 
-- **Kamogelo Selepe** (Project Lead)
+- **Kamogelo Selepe** <[kamoparisxx](https://github.com/kamoparisxx)> (Project Lead)
 - **Nobuhle Ndlovu** (Backend Developer)
 - **Amon Munyai** <[tamunyai](https://github.com/tamunyai)> (Frontend & Backend Developer)
 - **Njabulo Zulu** (Documentation & Research)

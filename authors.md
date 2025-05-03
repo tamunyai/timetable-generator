@@ -6,6 +6,6 @@
 
 ## Contributors
 
-- Kamogelo Selepe
+- Kamogelo Selepe <[kamoparisxx](https://github.com/kamoparisxx)>
 - Nobuhle Ndlovu
 - Njabulo Zulu
