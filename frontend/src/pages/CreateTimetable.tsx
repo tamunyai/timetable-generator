@@ -24,7 +24,7 @@ const CreateTimetable = () => {
 
   const [lecturers, setLecturers] = useState<string[]>([""]);
   const [programmes, setProgrammes] = useState<Programme[]>([
-    { name: "", modules: [{ name: "", year: 1, units: 2 }] },
+    { name: "", modules: [{ name: "", year: NaN, units: NaN }] },
   ]);
   const [error, setError] = useState<string | null>(null);
 
@@ -117,8 +117,8 @@ const CreateTimetable = () => {
     const updatedProgrammes = [...programmes];
     updatedProgrammes[programmeIndex].modules.push({
       name: "",
-      year: 1,
-      units: 2,
+      year: NaN,
+      units: NaN,
     });
     setProgrammes(updatedProgrammes);
     sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
@@ -269,7 +269,7 @@ const CreateTimetable = () => {
     <Layout
       title="Generate Timetable"
       headerRight={
-        <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4">
           {!isFormValid && (
             <Button
               type="button"
@@ -308,7 +308,7 @@ const CreateTimetable = () => {
         </div>
       }
     >
-      <section className="mx-auto px-4 py-12 max-w-4xl text-gray-800">
+      <section className="mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl text-gray-800">
         {error && <p className="mb-4 text-red-600">{error}</p>}
 
         <form className="space-y-10">
@@ -324,7 +324,7 @@ const CreateTimetable = () => {
                     value={lecturer}
                     onChange={(e) => updateLecturer(index, e.target.value)}
                     placeholder={`Lecturer ${index + 1}`}
-                    className="flex-1 px-3 py-2 border text-sm"
+                    className="px-3 py-2 border w-full text-sm"
                   />
                   <Button
                     type="button"
@@ -355,7 +355,7 @@ const CreateTimetable = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-4">
+            <div className="flex sm:flex-row flex-col items-stretch sm:items-center gap-4 mt-4">
               <Button
                 type="button"
                 label={
@@ -400,7 +400,7 @@ const CreateTimetable = () => {
                         updateProgramme(programmeIndex, e.target.value)
                       }
                       placeholder={`Programme ${programmeIndex + 1}`}
-                      className="flex-1 px-3 py-2 border text-sm"
+                      className="px-3 py-2 border w-full text-sm"
                     />
                   </div>
 
@@ -409,7 +409,7 @@ const CreateTimetable = () => {
                     {programme.modules.map((module, moduleIndex) => (
                       <div
                         key={moduleIndex}
-                        className="flex items-center gap-2 mb-2 w-full"
+                        className="flex sm:flex-row flex-col sm:items-center gap-2 w-full"
                       >
                         <input
                           id={`module-${moduleIndex + 1}-name`}
@@ -424,7 +424,7 @@ const CreateTimetable = () => {
                             )
                           }
                           placeholder={`Module Name ${moduleIndex + 1}`}
-                          className="flex-1 px-2 py-1 border text-sm"
+                          className="px-3 py-2 border w-full text-sm"
                         />
 
                         <input
@@ -442,7 +442,7 @@ const CreateTimetable = () => {
                           placeholder="Year"
                           min={1}
                           max={5}
-                          className="px-2 py-1 border text-sm"
+                          className="px-3 py-2 border w-full text-sm"
                         />
 
                         <select
@@ -456,7 +456,7 @@ const CreateTimetable = () => {
                               parseInt(e.target.value)
                             )
                           }
-                          className="px-2 py-1 border text-sm"
+                          className="px-3 py-2 border w-full text-sm"
                         >
                           <option value="">Units</option>
                           <option value={2}>2</option>
@@ -496,35 +496,34 @@ const CreateTimetable = () => {
                     ))}
                   </div>
 
-                  <Button
-                    type="button"
-                    label={
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="mr-2 w-4 h-4 lucide lucide-circle-plus-icon lucide-circle-plus"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M8 12h8" />
-                          <path d="M12 8v8" />
-                        </svg>
+                  <div className="flex sm:flex-row flex-col sm:justify-between items-stretch sm:items-center gap-4 sm:justify">
+                    <Button
+                      type="button"
+                      label={
+                        <div className="flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="mr-2 w-4 h-4 lucide lucide-circle-plus-icon lucide-circle-plus"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8 12h8" />
+                            <path d="M12 8v8" />
+                          </svg>
 
-                        <span>Add Module</span>
-                      </div>
-                    }
-                    onClick={() => addModule(programmeIndex)}
-                    className="mt-2"
-                  />
+                          <span>Add Module</span>
+                        </div>
+                      }
+                      onClick={() => addModule(programmeIndex)}
+                    />
 
-                  <div className="flex justify-end">
                     <Button
                       type="button"
                       label={
@@ -560,7 +559,7 @@ const CreateTimetable = () => {
               ))}
             </div>
 
-            <div className="mt-4">
+            <div className="flex sm:flex-row flex-col items-stretch sm:items-center gap-4 mt-4">
               <Button
                 type="button"
                 label={
@@ -589,12 +588,50 @@ const CreateTimetable = () => {
               />
             </div>
           </div>
+
+          <div className="md:hidden flex sm:flex-row flex-col items-stretch sm:items-center gap-4 py-3 border-t">
+            {!isFormValid && (
+              <Button
+                type="button"
+                label={
+                  <div className="flex items-center font-medium text-sm transition">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="mr-2 w-4 h-4 lucide lucide-circle-help-icon lucide-circle-help"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                      <path d="M12 17h.01" />
+                    </svg>
+                    <span>Why can't I submit?</span>
+                  </div>
+                }
+                onClick={() => setIsModalVisible(true)}
+                className="border-0 text-blue-600 hover:text-blue-800"
+              />
+            )}
+            <Button
+              type="button"
+              label="Generate Timetable"
+              className="bg-black hover:bg-gray-700 text-white"
+              disabled={!isFormValid}
+              onClick={handleGenerate}
+            />
+          </div>
         </form>
       </section>
 
       {error && (
         <div className="z-50 fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white shadow-xl p-6 rounded-lg w-full max-w-md">
+          <div className="bg-white shadow-lg mx-4 p-4 sm:p-6 rounded-lg w-full max-w-lg">
             <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -610,10 +647,7 @@ const CreateTimetable = () => {
                   d="M12 9v2m0 4h.01M12 5a7 7 0 110 14 7 7 0 010-14z"
                 />
               </svg>
-              <h2
-                id="error-title"
-                className="font-semibold text-gray-800 text-lg"
-              >
+              <h2 className="font-semibold text-gray-800 text-lg">
                 Something went wrong
               </h2>
             </div>
@@ -658,7 +692,7 @@ const CreateTimetable = () => {
             <path d="M2 12h4" />
             <path d="m4.9 4.9 2.9 2.9" />
           </svg>
-          <span className="font-medium text-lg">
+          <span className="px-4 font-medium text-base sm:text-lg text-center">
             Generating Your Timetable...
           </span>
         </div>
@@ -666,7 +700,7 @@ const CreateTimetable = () => {
 
       {isModalVisible && (
         <div className="z-50 fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white shadow-lg p-6 rounded-lg w-full max-w-lg">
+          <div className="bg-white shadow-lg mx-4 p-4 sm:p-6 rounded-lg w-full max-w-lg">
             <h2 className="mb-4 font-semibold text-gray-800 text-lg">
               Fix the following issues:
             </h2>

@@ -1,6 +1,6 @@
 const Footer: React.FC = () => {
   return (
-    <footer className="flex justify-between items-center mx-auto mt-24 px-4 py-6 border-t max-w-5xl text-sm text-center">
+    <footer className="flex sm:flex-row flex-col justify-between items-center sm:space-y-0 mx-auto mt-24 px-4 py-6 border-t max-w-5xl text-gray-600 text-sm text-center">
       <div className="mb-2 hover:underline">
         <a
           href="https://github.com/tamunyai/timetable-generator"
