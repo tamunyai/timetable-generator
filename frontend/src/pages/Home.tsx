@@ -15,7 +15,10 @@ const Home = () => {
   ];
 
   return (
-    <Layout title="Home">
+    <Layout
+      title="Home"
+      headerRight={<Button to="create" label="Get Started" />}
+    >
       <section className="flex flex-col justify-center items-center mx-auto px-4 py-24 max-w-3xl min-h-[80vh] text-center">
         <div className="inline-block bg-blue-100 mb-6 px-3 py-1 font-semibold text-blue-800 text-xs">
           Site Under Construction
@@ -32,7 +35,7 @@ const Home = () => {
         <Button to="/create" label="Generate Your Timetable" />
       </section>
 
-      <section className="mx-auto mt-12 px-4 py-16 border-t max-w-6xl text-gray-800">
+      <section className="mx-auto mt-12 px-4 py-16 max-w-6xl text-gray-800">
         <h2 className="mb-12 font-semibold text-3xl md:text-4xl text-center">
           What It Does
         </h2>
