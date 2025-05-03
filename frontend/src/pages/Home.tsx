@@ -101,21 +101,34 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="bg-gray-50 mx-auto px-4 py-16 border-t max-w-6xl text-gray-800">
-        <h2 className="mb-10 font-semibold text-3xl text-center">
+      <section className="mx-auto px-4 py-16 max-w-6xl text-gray-800">
+        <h2 className="mb-10 font-semibold text-3xl md:text-4xl text-center">
           Meet the Team
         </h2>
 
-        <div className="gap-6 grid sm:grid-cols-2 md:grid-cols-4">
-          {contributors.map((contributor, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-sm hover:shadow-md p-4 border rounded-lg text-center transition"
-            >
-              <div className="font-semibold text-lg">{contributor.name}</div>
-              <div className="text-gray-500 text-sm">{contributor.role}</div>
-            </div>
-          ))}
+        <div className="relative overflow-hidden">
+          {/* Scrolling content */}
+          <div className="flex space-x-4 w-max animate-infinite-scroll">
+            {[...contributors, ...contributors, ...contributors].map(
+              (contributor, index) => (
+                <div
+                  key={index}
+                  className="inline-block p-4 rounded-lg text-center transition"
+                >
+                  <div className="font-semibold text-lg">
+                    {contributor.name}
+                  </div>
+                  <div className="text-gray-500 text-sm">
+                    {contributor.role}
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+          {/* Left blur */}
+          <div className="top-0 left-0 z-10 absolute bg-gradient-to-r from-gray-50 to-transparent w-16 h-full pointer-events-none" />
+          {/* Right blur */}
+          <div className="top-0 right-0 z-10 absolute bg-gradient-to-l from-gray-50 to-transparent w-16 h-full pointer-events-none" />{" "}
         </div>
       </section>
 
