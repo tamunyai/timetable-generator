@@ -14,7 +14,7 @@ def serve_index():
     return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/api/generate", methods=["POST"])
-def create_timetable():  # -> tuple[Any, Literal[400]] | tuple[Any, Literal[200]] | tuple...:# -> tuple[Any, Literal[400]] | tuple[Any, Literal[200]] | tuple...:# -> tuple[Any, Literal[400]] | tuple[Any, Literal[200]] | tuple...:
+def create_timetable():
     """
     Generates a timetable based on user input received as JSON data.
 
