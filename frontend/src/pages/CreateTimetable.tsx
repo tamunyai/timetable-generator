@@ -17,91 +17,38 @@ interface Programme {
 const LECTURERS_KEY = "ttg_lecturers";
 const PROGRAMMES_KEY = "ttg_programmes";
 
-const API_URL = "http://localhost:5000/api";
-
-const DEFAULT_LECTURERS = [
-  "Dr. Smith",
-  "Prof. Johnson",
-  "Dr. Williams",
-  "Dr. Brown",
-  "Prof. Jones",
-  "Dr. Garcia",
-  "Prof. Miller",
-  "Dr. Davis",
-];
-
-const DEFAULT_PROGRAMMES = [
-  {
-    name: "Computer Science",
-    modules: [
-      { name: "Data Structures", year: 2, units: 3 },
-      { name: "Algorithms", year: 2, units: 3 },
-      { name: "Operating Systems", year: 3, units: 4 },
-      { name: "Computer Networks", year: 3, units: 3 },
-      { name: "Databases", year: 2, units: 2 },
-      { name: "AI Basics", year: 4, units: 2 },
-      { name: "Web Development", year: 2, units: 2 },
-    ],
-  },
-  {
-    name: "Information Systems",
-    modules: [
-      { name: "Systems Analysis", year: 2, units: 3 },
-      { name: "Business Intelligence", year: 3, units: 3 },
-      { name: "IT Governance", year: 3, units: 2 },
-      { name: "Databases", year: 2, units: 2 },
-      { name: "Enterprise Architecture", year: 4, units: 3 },
-      { name: "Digital Transformation", year: 4, units: 2 },
-      { name: "Cloud Systems", year: 4, units: 2 },
-    ],
-  },
-  {
-    name: "Software Engineering",
-    modules: [
-      { name: "Software Design", year: 3, units: 3 },
-      { name: "Testing & QA", year: 3, units: 2 },
-      { name: "Agile Dev", year: 2, units: 3 },
-      { name: "System Architecture", year: 3, units: 4 },
-      { name: "Mobile Dev", year: 4, units: 2 },
-      { name: "DevOps", year: 4, units: 2 },
-      { name: "Project Management", year: 4, units: 2 },
-    ],
-  },
-  {
-    name: "Data Science",
-    modules: [
-      { name: "Statistics", year: 2, units: 3 },
-      { name: "Python for Data", year: 2, units: 3 },
-      { name: "Machine Learning", year: 3, units: 4 },
-      { name: "Data Mining", year: 3, units: 3 },
-      { name: "Data Viz", year: 4, units: 2 },
-      { name: "Big Data", year: 4, units: 3 },
-      { name: "Capstone", year: 4, units: 2 },
-    ],
-  },
-];
-
 const CreateTimetable = () => {
   const navigate = useNavigate();
   const [lecturers, setLecturers] = useState<string[]>([""]);
-  const [programmes, setProgrammes] = useState<Programme[]>([]);
+  const [programmes, setProgrammes] = useState<Programme[]>([
+    { name: "", modules: [{ name: "", year: 1, units: 2 }] },
+  ]);
   const [error, setError] = useState<string | null>(null);
 
+  const [errors, setErrors] = useState<string[]>([]);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
   useEffect(() => {
-    // const savedLecturers = sessionStorage.getItem(LECTURERS_KEY);
-    // const savedProgrammes = sessionStorage.getItem(PROGRAMMES_KEY);
+    const savedLecturers = sessionStorage.getItem(LECTURERS_KEY);
+    const savedProgrammes = sessionStorage.getItem(PROGRAMMES_KEY);
 
-    setLecturers(DEFAULT_LECTURERS);
-    setProgrammes(DEFAULT_PROGRAMMES);
+    if (savedLecturers) {
+      setLecturers(JSON.parse(savedLecturers));
+    }
 
-    // if (savedLecturers) {
-    //   setLecturers(JSON.parse(savedLecturers));
-    // }
-
-    // if (savedProgrammes) {
-    //   setProgrammes(JSON.parse(savedProgrammes));
-    // }
+    if (savedProgrammes) {
+      setProgrammes(JSON.parse(savedProgrammes));
+    }
   }, []);
+
+  useEffect(() => {
+    const newErrors = validateTimetableForm(lecturers, programmes);
+    setErrors(newErrors);
+    setIsFormValid(newErrors.length === 0);
+  }, [lecturers, programmes]);
 
   // Add new lecturer
   const addLecturer = () => {
@@ -200,14 +147,9 @@ const CreateTimetable = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setError(null);
-
-    if (lecturers.length === 0 || programmes.length === 0) {
-      setError("Please add at least one lecturer and one programme.");
-      return;
-    }
+    setIsLoading(true);
 
     const payload = {
       lecturers,
@@ -222,15 +164,13 @@ const CreateTimetable = () => {
     };
 
     try {
-      const response = await fetch(`${API_URL}/generate`, {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-
-      console.log(response);
 
       if (!response.ok) {
         throw new Error("Failed to generate timetable");
@@ -243,29 +183,131 @@ const CreateTimetable = () => {
     } catch (err) {
       console.error(err);
       setError("An error occurred while generating the timetable.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const validateTimetableForm = (
+    lecturers: string[],
+    programmes: Programme[]
+  ): string[] => {
+    const errors: string[] = [];
+
+    // Lecturers
+    const uniqueLecturers = Array.from(new Set(lecturers.filter(Boolean)));
+    if (lecturers.length < 8) {
+      errors.push("You need at least 8 lecturers to generate a timetable.");
+    } else if (uniqueLecturers.length < 8) {
+      errors.push("You need at least 8 unique lecturers.");
     }
 
-    console.log({ lecturers, programmes });
-  };
+    // Programmes
+    const nonEmptyProgrammes = programmes.filter((p) => p.name.trim() !== "");
+    if (programmes.length < 4) {
+      errors.push("You need at least 4 degree programmes.");
+    } else if (nonEmptyProgrammes.length < 4) {
+      errors.push("You need at least 4 unique degree programmes.");
+    }
 
-  const handleReset = () => {
-    setLecturers([""]);
-    setProgrammes([{ name: "", modules: [{ name: "", year: 1, units: 2 }] }]);
-    sessionStorage.removeItem(LECTURERS_KEY);
-    sessionStorage.removeItem(PROGRAMMES_KEY);
-  };
+    // Per programme checks
+    for (const programme of nonEmptyProgrammes) {
+      const { name, modules } = programme;
+      if (!modules || modules.length === 0) {
+        errors.push(`Programme "${name}" must have at least 1 module.`);
+        continue;
+      }
 
-  const isFormValid =
-    lecturers.length >= 8 &&
-    programmes.length >= 4 &&
-    programmes.every((p) => p.modules.length >= 7);
+      let totalUnits = 0;
+      let fourUnitCount = 0;
+
+      for (const mod of modules) {
+        if (!mod.name || !mod.units || !mod.year) {
+          errors.push(`Invalid module data in programme "${name}".`);
+          break;
+        }
+
+        if (![2, 3, 4].includes(mod.units)) {
+          errors.push(
+            `Module "${mod.name}" in "${name}" has invalid unit count.`
+          );
+          continue;
+        }
+
+        if (mod.units === 4) {
+          fourUnitCount++;
+          if (fourUnitCount > 2) {
+            errors.push(`"${name}" cannot have more than two 4-unit courses.`);
+            break;
+          }
+        }
+
+        totalUnits += mod.units;
+      }
+
+      if (modules.length < 7) {
+        errors.push(`Programme "${name}" must have at least 7 modules.`);
+      }
+
+      if (totalUnits > 24) {
+        errors.push(`Total units for "${name}" exceed 24.`);
+      } else if (totalUnits < 16) {
+        errors.push(
+          `Total units for "${name}" is less than the minimum required (16).`
+        );
+      }
+    }
+
+    return errors;
+  };
 
   return (
-    <Layout title="Generate Timetable">
+    <Layout
+      title="Generate Timetable"
+      headerRight={
+        <div className="flex items-center gap-4">
+          {!isFormValid && (
+            <Button
+              type="button"
+              label={
+                <div className="flex items-center font-medium text-sm transition">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 w-4 h-4 lucide lucide-circle-help-icon lucide-circle-help"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <path d="M12 17h.01" />
+                  </svg>
+                  <span>Why can't I submit?</span>
+                </div>
+              }
+              onClick={() => setIsModalVisible(true)}
+              className="border-0 text-blue-600 hover:text-blue-800"
+            />
+          )}
+          <Button
+            type="submit"
+            label="Generate Timetable"
+            className="bg-black hover:bg-gray-700 text-white"
+            disabled={!isFormValid}
+            onClick={handleSubmit}
+          />
+        </div>
+      }
+    >
       <section className="mx-auto px-4 py-12 max-w-4xl text-gray-800">
         {error && <p className="mb-4 text-red-600">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-10">
+        <form className="space-y-10">
           {/* Lecturers */}
           <div>
             <h2 className="mb-2 font-semibold text-xl">Lecturers</h2>{" "}
@@ -273,7 +315,7 @@ const CreateTimetable = () => {
               {lecturers.map((lecturer, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <input
-                    id={`Lecturer ${index + 1}`}
+                    id={`lecturer-${index + 1}`}
                     type="text"
                     value={lecturer}
                     onChange={(e) => updateLecturer(index, e.target.value)}
@@ -478,7 +520,7 @@ const CreateTimetable = () => {
                     className="mt-2"
                   />
 
-                  <div className="flex justify-end mt-4">
+                  <div className="flex justify-end">
                     <Button
                       type="button"
                       label={
@@ -543,28 +585,102 @@ const CreateTimetable = () => {
               />
             </div>
           </div>
-
-          <div className="flex justify-end gap-4 mt-6 pt-4 border-t">
-            <Button
-              type="button"
-              label="Reset All"
-              onClick={handleReset}
-              className="text-red-700"
-            />
-            <Button
-              type="submit"
-              label="Generate Timetable"
-              className="bg-black hover:bg-gray-700 text-white"
-              disabled={!isFormValid}
-              title={
-                !isFormValid
-                  ? "You need at least 8 lecturers, 4 degree programmes, and 7 modules per programme."
-                  : ""
-              }
-            />
-          </div>
         </form>
       </section>
+
+      {error && (
+        <div className="z-50 fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white shadow-xl p-6 rounded-lg w-full max-w-md">
+            <div className="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mr-2 w-6 h-6 text-red-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v2m0 4h.01M12 5a7 7 0 110 14 7 7 0 010-14z"
+                />
+              </svg>
+              <h2
+                id="error-title"
+                className="font-semibold text-gray-800 text-lg"
+              >
+                Something went wrong
+              </h2>
+            </div>
+
+            <div className="flex-1">
+              <p id="error-message" className="mt-4 text-red-600">
+                {error}
+              </p>
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <Button
+                label="OK"
+                onClick={() => setError(null)}
+                className="border-0 text-blue-800"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="z-50 fixed inset-0 flex flex-col justify-center items-center bg-black/50 backdrop-blur-sm text-gray-300">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="mb-4 w-12 h-12 animate-spin lucide lucide-loader-icon lucide-loader"
+          >
+            <path d="M12 2v4" />
+            <path d="m16.2 7.8 2.9-2.9" />
+            <path d="M18 12h4" />
+            <path d="m16.2 16.2 2.9 2.9" />
+            <path d="M12 18v4" />
+            <path d="m4.9 19.1 2.9-2.9" />
+            <path d="M2 12h4" />
+            <path d="m4.9 4.9 2.9 2.9" />
+          </svg>
+          <span className="font-medium text-lg">
+            Generating Your Timetable...
+          </span>
+        </div>
+      )}
+
+      {isModalVisible && (
+        <div className="z-50 fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white shadow-lg p-6 rounded-lg w-full max-w-lg">
+            <h2 className="mb-4 font-semibold text-gray-800 text-lg">
+              Fix the following issues:
+            </h2>
+            <ul className="space-y-1 text-red-700 text-sm list-disc list-inside">
+              {errors.map((err, i) => (
+                <li key={i}>{err}</li>
+              ))}
+            </ul>
+            <div className="flex justify-end mt-6">
+              <Button
+                label="OK"
+                onClick={() => setIsModalVisible(false)}
+                className="border-0 text-blue-800"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };
