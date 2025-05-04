@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "./Layout";
-import { Button } from "../components";
+import { Button, FileDownIcon } from "../components";
 import { useRouteGuard } from "../contexts";
 import { useNavigate } from "react-router-dom";
+import { DUMMY_TIMETABLE_DATA, TIMETABLE_KEY } from "../constants";
+import { loadFromSession } from "../utils";
+import { isDev } from "../env";
 
-
-
-const ViewTimetable = () => {
+const ViewTimetable: React.FC = () => {
   const navigate = useNavigate();
   const { canView } = useRouteGuard();
   const printRef = useRef<HTMLDivElement>(null);
@@ -14,15 +15,16 @@ const ViewTimetable = () => {
   const [timetable, setTimetable] = useState<TimetableData>({});
 
   useEffect(() => {
-    if (!canView) {
+    if (!canView && !isDev) {
       navigate("/create");
     }
   }, [canView, navigate]);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("timetable");
-    if (stored) {
-      setTimetable(JSON.parse(stored));
+    if (isDev) {
+      setTimetable(DUMMY_TIMETABLE_DATA);
+    } else {
+      setTimetable(loadFromSession<TimetableData>(TIMETABLE_KEY) || {});
     }
   }, []);
 
@@ -32,7 +34,7 @@ const ViewTimetable = () => {
     }
   };
 
-  return canView ? (
+  return canView || isDev ? (
     <Layout
       title="View Timetable"
       headerRight={
@@ -40,23 +42,7 @@ const ViewTimetable = () => {
           onClick={handlePrint}
           label={
             <div title="Print">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-6 h-6 lucide lucide-file-down-icon lucide-file-down"
-              >
-                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                <path d="M12 18v-6" />
-                <path d="m9 15 3 3 3-3" />
-              </svg>
+              <FileDownIcon />
             </div>
           }
           className="print:hidden border-0"

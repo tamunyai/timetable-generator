@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import Layout from "./Layout";
-import { Button } from "../components";
+import {
+  Button,
+  ErrorModal,
+  LoadingOverlay,
+  ValidationModal,
+  HelpIcon,
+  PlusIcon,
+  TrashIcon,
+} from "../components";
 import { useNavigate } from "react-router-dom";
 import { useRouteGuard } from "../contexts";
 import {
@@ -194,23 +202,8 @@ const CreateTimetable = () => {
             <Button
               type="button"
               label={
-                <div className="flex items-center font-medium text-sm transition">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="mr-2 w-4 h-4 lucide lucide-circle-help-icon lucide-circle-help"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                    <path d="M12 17h.01" />
-                  </svg>
+                <div className="flex items-center gap-2 font-medium text-sm transition">
+                  <HelpIcon />
                   <span>Why can't I submit?</span>
                 </div>
               }
@@ -229,8 +222,6 @@ const CreateTimetable = () => {
       }
     >
       <section className="mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-4xl text-gray-800">
-        {error && <p className="mb-4 text-red-600">{error}</p>}
-
         <form className="space-y-10">
           {/* Lecturers */}
           <div>
@@ -248,26 +239,7 @@ const CreateTimetable = () => {
                   />
                   <Button
                     type="button"
-                    label={
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="w-4 h-4 lucide lucide-trash2-icon lucide-trash-2"
-                      >
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                        <line x1="10" x2="10" y1="11" y2="17" />
-                        <line x1="14" x2="14" y1="11" y2="17" />
-                      </svg>
-                    }
+                    label={<TrashIcon />}
                     onClick={() => removeLecturer(index)}
                     className="border-0"
                     disabled={lecturers.length === 1}
@@ -279,24 +251,8 @@ const CreateTimetable = () => {
               <Button
                 type="button"
                 label={
-                  <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="mr-2 w-4 h-4 lucide lucide-circle-plus-icon lucide-circle-plus"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M8 12h8" />
-                      <path d="M12 8v8" />
-                    </svg>
-
+                  <div className="flex items-center gap-2">
+                    <PlusIcon />
                     <span>Add Lecturer</span>
                   </div>
                 }
@@ -350,26 +306,7 @@ const CreateTimetable = () => {
 
                           <Button
                             type="button"
-                            label={
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="w-4 h-4 lucide lucide-trash2-icon lucide-trash-2"
-                              >
-                                <path d="M3 6h18" />
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                                <line x1="10" x2="10" y1="11" y2="17" />
-                                <line x1="14" x2="14" y1="11" y2="17" />
-                              </svg>
-                            }
+                            label={<TrashIcon />}
                             onClick={() =>
                               removeModule(programmeIndex, moduleIndex)
                             }
@@ -422,26 +359,7 @@ const CreateTimetable = () => {
                         <div className="hidden sm:block">
                           <Button
                             type="button"
-                            label={
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="w-4 h-4 lucide lucide-trash2-icon lucide-trash-2"
-                              >
-                                <path d="M3 6h18" />
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                                <line x1="10" x2="10" y1="11" y2="17" />
-                                <line x1="14" x2="14" y1="11" y2="17" />
-                              </svg>
-                            }
+                            label={<TrashIcon />}
                             onClick={() =>
                               removeModule(programmeIndex, moduleIndex)
                             }
@@ -457,24 +375,8 @@ const CreateTimetable = () => {
                     <Button
                       type="button"
                       label={
-                        <div className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="mr-2 w-4 h-4 lucide lucide-circle-plus-icon lucide-circle-plus"
-                          >
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M8 12h8" />
-                            <path d="M12 8v8" />
-                          </svg>
-
+                        <div className="flex items-center gap-2">
+                          <PlusIcon />
                           <span>Add Module</span>
                         </div>
                       }
@@ -484,26 +386,8 @@ const CreateTimetable = () => {
                     <Button
                       type="button"
                       label={
-                        <div className="flex items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="mr-2 w-4 h-4 lucide lucide-trash2-icon lucide-trash-2"
-                          >
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                            <line x1="10" x2="10" y1="11" y2="17" />
-                            <line x1="14" x2="14" y1="11" y2="17" />
-                          </svg>
-
+                        <div className="flex items-center gap-2">
+                          <TrashIcon />
                           <span>Remove Programme</span>
                         </div>
                       }
@@ -520,24 +404,8 @@ const CreateTimetable = () => {
               <Button
                 type="button"
                 label={
-                  <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="mr-2 w-4 h-4 lucide lucide-circle-plus-icon lucide-circle-plus"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M8 12h8" />
-                      <path d="M12 8v8" />
-                    </svg>
-
+                  <div className="flex items-center gap-2">
+                    <PlusIcon />
                     <span>Add Degree Programme</span>
                   </div>
                 }
@@ -551,23 +419,8 @@ const CreateTimetable = () => {
               <Button
                 type="button"
                 label={
-                  <div className="flex items-center font-medium text-sm transition">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="mr-2 w-4 h-4 lucide lucide-circle-help-icon lucide-circle-help"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                      <path d="M12 17h.01" />
-                    </svg>
+                  <div className="flex items-center gap-2 font-medium text-sm transition">
+                    <HelpIcon />
                     <span>Why can't I submit?</span>
                   </div>
                 }
@@ -586,95 +439,15 @@ const CreateTimetable = () => {
         </form>
       </section>
 
-      {error && (
-        <div className="z-50 fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white shadow-lg mx-4 p-4 sm:p-6 rounded-lg w-full max-w-lg">
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2 w-6 h-6 text-red-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v2m0 4h.01M12 5a7 7 0 110 14 7 7 0 010-14z"
-                />
-              </svg>
-              <h2 className="font-semibold text-gray-800 text-lg">
-                Something went wrong
-              </h2>
-            </div>
+      {error && <ErrorModal message={error} onClose={() => setError(null)} />}
 
-            <div className="flex-1">
-              <p id="error-message" className="mt-4 text-red-600">
-                {error}
-              </p>
-            </div>
-
-            <div className="flex justify-end mt-6">
-              <Button
-                label="OK"
-                onClick={() => setError(null)}
-                className="border-0 text-blue-800"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isLoading && (
-        <div className="z-50 fixed inset-0 flex flex-col justify-center items-center bg-black/50 backdrop-blur-sm text-gray-300">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mb-4 w-12 h-12 animate-spin lucide lucide-loader-icon lucide-loader"
-          >
-            <path d="M12 2v4" />
-            <path d="m16.2 7.8 2.9-2.9" />
-            <path d="M18 12h4" />
-            <path d="m16.2 16.2 2.9 2.9" />
-            <path d="M12 18v4" />
-            <path d="m4.9 19.1 2.9-2.9" />
-            <path d="M2 12h4" />
-            <path d="m4.9 4.9 2.9 2.9" />
-          </svg>
-          <span className="px-4 font-medium text-base sm:text-lg text-center">
-            Generating Your Timetable...
-          </span>
-        </div>
-      )}
+      {isLoading && <LoadingOverlay />}
 
       {isModalVisible && (
-        <div className="z-50 fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white shadow-lg mx-4 p-4 sm:p-6 rounded-lg w-full max-w-lg">
-            <h2 className="mb-4 font-semibold text-gray-800 text-lg">
-              Fix the following issues:
-            </h2>
-            <ul className="space-y-1 text-red-700 text-sm list-disc list-inside">
-              {errors.map((err, i) => (
-                <li key={i}>{err}</li>
-              ))}
-            </ul>
-            <div className="flex justify-end mt-6">
-              <Button
-                label="OK"
-                onClick={() => setIsModalVisible(false)}
-                className="border-0 text-blue-800"
-              />
-            </div>
-          </div>
-        </div>
+        <ValidationModal
+          messages={errors}
+          onClose={() => setIsModalVisible(false)}
+        />
       )}
     </Layout>
   );

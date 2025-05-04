@@ -1,8 +1,9 @@
+import React from "react";
 import Layout from "./Layout";
 import { Button, Footer } from "../components";
 import { CONTRIBUTORS } from "../constants";
 
-const Home = () => (
+const Home: React.FC = () => (
   <Layout
     title="Home"
     headerRight={

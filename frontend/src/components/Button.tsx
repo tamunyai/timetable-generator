@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 interface ButtonProps {
@@ -9,7 +10,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   to,
   label = "Get Started",
   onClick,
@@ -44,5 +45,3 @@ const Button: React.FC<ButtonProps> = ({
       </button>
   );
 };
-
-export default Button;

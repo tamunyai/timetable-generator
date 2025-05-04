@@ -1,10 +1,12 @@
-import {
+import React, {
   createContext,
   SetStateAction,
   useContext,
   useEffect,
   useState,
 } from "react";
+import { loadFromSession, saveToSession } from "../utils";
+import { ROUTE_GUARD_KEY } from "../constants";
 
 type RouteGuardContextType = {
   canView: boolean;
@@ -21,16 +23,16 @@ export const RouteGuardProvider = ({
   children: React.ReactNode;
 }) => {
   const [canView, setCanViewState] = useState<boolean>(
-    () => sessionStorage.getItem("canView") === "true"
+    () => loadFromSession(ROUTE_GUARD_KEY) === "true"
   );
 
   useEffect(() => {
-    sessionStorage.setItem("canView", canView.toString());
+    saveToSession(ROUTE_GUARD_KEY, canView.toString())
   }, [canView]);
 
   const setCanView = (value: SetStateAction<boolean>) => {
     setCanViewState(value);
-    sessionStorage.setItem("canView", value.toString());
+    saveToSession(ROUTE_GUARD_KEY, value.toString());
   };
 
   return (
