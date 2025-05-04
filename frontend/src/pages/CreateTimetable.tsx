@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import { Button } from "../components";
 import { useNavigate } from "react-router-dom";
 import { useRouteGuard } from "../contexts";
+import { API_URL, LECTURERS_KEY, PROGRAMMES_KEY } from "../constants";
 
 interface Module {
   name: string;
@@ -14,12 +15,6 @@ interface Programme {
   name: string;
   modules: Module[];
 }
-
-const LECTURERS_KEY = "ttg_lecturers";
-const PROGRAMMES_KEY = "ttg_programmes";
-
-const API_URL =
-  import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
 
 const CreateTimetable = () => {
   const navigate = useNavigate();
