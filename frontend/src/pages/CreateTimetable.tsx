@@ -5,17 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useRouteGuard } from "../contexts";
 import { API_URL, LECTURERS_KEY, PROGRAMMES_KEY } from "../constants";
 
-interface Module {
-  name: string;
-  year: number;
-  units: number;
-}
-
-interface Programme {
-  name: string;
-  modules: Module[];
-}
-
 const CreateTimetable = () => {
   const navigate = useNavigate();
   const { setCanView } = useRouteGuard();

@@ -4,19 +4,7 @@ import { Button } from "../components";
 import { useRouteGuard } from "../contexts";
 import { useNavigate } from "react-router-dom";
 
-interface ModuleSlot {
-  day: string;
-  start_time: string;
-  end_time: string;
-  module_name: string;
-  lecturer: string;
-  year: number;
-  units: number;
-}
 
-interface TimetableData {
-  [programme: string]: ModuleSlot[];
-}
 
 const ViewTimetable = () => {
   const navigate = useNavigate();
