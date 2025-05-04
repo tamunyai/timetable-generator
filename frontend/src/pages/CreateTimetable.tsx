@@ -18,6 +18,9 @@ interface Programme {
 const LECTURERS_KEY = "ttg_lecturers";
 const PROGRAMMES_KEY = "ttg_programmes";
 
+const API_URL =
+  import.meta.env.MODE === "development" ? "http://127.0.0.1:5000/api" : "/api";
+
 const CreateTimetable = () => {
   const navigate = useNavigate();
   const { setCanView } = useRouteGuard();
@@ -159,7 +162,7 @@ const CreateTimetable = () => {
     };
 
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch(`${API_URL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
