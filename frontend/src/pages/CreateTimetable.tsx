@@ -9,8 +9,14 @@ import {
   DUMMY_PROGRAMMES,
   LECTURERS_KEY,
   PROGRAMMES_KEY,
+  TIMETABLE_KEY,
 } from "../constants";
 import { isDev } from "../env";
+import {
+  loadFromSession,
+  saveToSession,
+  validateTimetableForm,
+} from "../utils";
 
 const CreateTimetable = () => {
   const navigate = useNavigate();
@@ -20,29 +26,25 @@ const CreateTimetable = () => {
   const [programmes, setProgrammes] = useState<Programme[]>([
     { name: "", modules: [{ name: "", year: NaN, units: NaN }] },
   ]);
-  const [error, setError] = useState<string | null>(null);
 
+  const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
-  const [isFormValid, setIsFormValid] = useState(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (isDev) {
       setLecturers(DUMMY_LECTURERS);
       setProgrammes(DUMMY_PROGRAMMES);
-
     } else {
-      const savedLecturers = sessionStorage.getItem(LECTURERS_KEY);
-      if (savedLecturers) {
-        setLecturers(JSON.parse(savedLecturers));
-      }
-
-      const savedProgrammes = sessionStorage.getItem(PROGRAMMES_KEY);
-      if (savedProgrammes) {
-        setProgrammes(JSON.parse(savedProgrammes));
-      }
+      setLecturers(loadFromSession<string[]>(LECTURERS_KEY) || [""]);
+      setProgrammes(
+        loadFromSession<Programme[]>(PROGRAMMES_KEY) || [
+          { name: "", modules: [{ name: "", year: NaN, units: NaN }] },
+        ]
+      );
     }
   }, []);
 
@@ -56,7 +58,7 @@ const CreateTimetable = () => {
   const addLecturer = () => {
     const updatedLecturers = [...lecturers, ""];
     setLecturers(updatedLecturers);
-    sessionStorage.setItem(LECTURERS_KEY, JSON.stringify(updatedLecturers));
+    saveToSession(LECTURERS_KEY, updatedLecturers);
   };
 
   // Update lecturer's name
@@ -64,7 +66,7 @@ const CreateTimetable = () => {
     const updatedLecturers = [...lecturers];
     updatedLecturers[index] = value;
     setLecturers(updatedLecturers);
-    sessionStorage.setItem(LECTURERS_KEY, JSON.stringify(updatedLecturers));
+    saveToSession(LECTURERS_KEY, updatedLecturers);
   };
 
   // Remove lecturer by index
@@ -72,7 +74,7 @@ const CreateTimetable = () => {
     if (lecturers.length > 1) {
       const updatedLecturers = lecturers.filter((_, i) => i !== index);
       setLecturers(updatedLecturers);
-      sessionStorage.setItem(LECTURERS_KEY, JSON.stringify(updatedLecturers));
+      saveToSession(LECTURERS_KEY, updatedLecturers);
     }
   };
 
@@ -83,7 +85,7 @@ const CreateTimetable = () => {
       { name: "", modules: [{ name: "", year: NaN, units: NaN }] },
     ];
     setProgrammes(updatedProgrammes);
-    sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
+    saveToSession(PROGRAMMES_KEY, updatedProgrammes);
   };
 
   // Update programme's name
@@ -91,7 +93,7 @@ const CreateTimetable = () => {
     const updatedProgrammes = [...programmes];
     updatedProgrammes[index].name = value;
     setProgrammes(updatedProgrammes);
-    sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
+    saveToSession(PROGRAMMES_KEY, updatedProgrammes);
   };
 
   // Remove programme by index
@@ -99,7 +101,7 @@ const CreateTimetable = () => {
     if (programmes.length > 1) {
       const updatedProgrammes = programmes.filter((_, i) => i !== index);
       setProgrammes(updatedProgrammes);
-      sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
+      saveToSession(PROGRAMMES_KEY, updatedProgrammes);
     }
   };
 
@@ -112,7 +114,7 @@ const CreateTimetable = () => {
       units: NaN,
     });
     setProgrammes(updatedProgrammes);
-    sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
+    saveToSession(PROGRAMMES_KEY, updatedProgrammes);
   };
 
   // Update module's name
@@ -125,7 +127,7 @@ const CreateTimetable = () => {
     const updatedProgrammes = [...programmes];
     updatedProgrammes[programmeIndex].modules[moduleIndex][field] = value;
     setProgrammes(updatedProgrammes);
-    sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
+    saveToSession(PROGRAMMES_KEY, updatedProgrammes);
   };
 
   // Remove module from a specific programme
@@ -136,7 +138,7 @@ const CreateTimetable = () => {
         programmeIndex
       ].modules.filter((_, i) => i !== moduleIndex);
       setProgrammes(updatedProgrammes);
-      sessionStorage.setItem(PROGRAMMES_KEY, JSON.stringify(updatedProgrammes));
+      saveToSession(PROGRAMMES_KEY, updatedProgrammes);
     }
   };
 
@@ -172,7 +174,7 @@ const CreateTimetable = () => {
 
       const data = await response.json();
 
-      sessionStorage.setItem("timetable", JSON.stringify(data?.timetable));
+      saveToSession(TIMETABLE_KEY, data?.timetable);
       setCanView(true);
       navigate("/view");
     } catch (err) {
@@ -181,79 +183,6 @@ const CreateTimetable = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const validateTimetableForm = (
-    lecturers: string[],
-    programmes: Programme[]
-  ): string[] => {
-    const errors: string[] = [];
-
-    // Lecturers
-    const uniqueLecturers = Array.from(new Set(lecturers.filter(Boolean)));
-    if (lecturers.length < 8) {
-      errors.push("You need at least 8 lecturers to generate a timetable.");
-    } else if (uniqueLecturers.length < 8) {
-      errors.push("You need at least 8 unique lecturers.");
-    }
-
-    // Programmes
-    const nonEmptyProgrammes = programmes.filter((p) => p.name.trim() !== "");
-    if (programmes.length < 4) {
-      errors.push("You need at least 4 degree programmes.");
-    } else if (nonEmptyProgrammes.length < 4) {
-      errors.push("You need at least 4 unique degree programmes.");
-    }
-
-    // Per programme checks
-    for (const programme of nonEmptyProgrammes) {
-      const { name, modules } = programme;
-      if (!modules || modules.length === 0) {
-        errors.push(`Programme "${name}" must have at least 1 module.`);
-        continue;
-      }
-
-      let totalUnits = 0;
-      let fourUnitCount = 0;
-
-      for (const mod of modules) {
-        if (!mod.name || !mod.units || !mod.year) {
-          errors.push(`Invalid module data in programme "${name}".`);
-          break;
-        }
-
-        if (![2, 3, 4].includes(mod.units)) {
-          errors.push(
-            `Module "${mod.name}" in "${name}" has invalid unit count.`
-          );
-          continue;
-        }
-
-        if (mod.units === 4) {
-          fourUnitCount++;
-          if (fourUnitCount > 2) {
-            errors.push(`"${name}" cannot have more than two 4-unit courses.`);
-            break;
-          }
-        }
-
-        totalUnits += mod.units;
-      }
-
-      if (modules.length < 7) {
-        errors.push(`Programme "${name}" must have at least 7 modules.`);
-      }
-
-      if (totalUnits > 24) {
-        errors.push(`Total units for "${name}" exceed 24.`);
-      } else if (totalUnits < 16) {
-        errors.push(
-          `Total units for "${name}" is less than the minimum required (16).`
-        );
-      }
-    }
-
-    return errors;
   };
 
   return (
@@ -479,7 +408,9 @@ const CreateTimetable = () => {
                                 parseInt(e.target.value)
                               )
                             }
-                            className="px-3 py-2 border w-full text-gray-400 text-sm"
+                            className={`px-3 py-2 border w-full text-sm ${
+                              !module.units && "text-gray-400"
+                            }`}
                           >
                             <option value="">Units</option>
                             <option value={2}>2</option>
