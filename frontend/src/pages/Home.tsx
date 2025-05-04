@@ -1,20 +1,8 @@
 import Layout from "./Layout";
 import { Button, Footer } from "../components";
+import { CONTRIBUTORS } from "../constants";
 
-interface Contributor {
-  name: string;
-  role: string;
-}
-
-const Home = () => {
-  const contributors: Contributor[] = [
-    { name: "Kamogelo Selepe", role: "Project Lead" },
-    { name: "Nobuhle Ndlovu", role: "Backend Developer" },
-    { name: "Thendo A Munyai", role: "Frontend & Backend Developer" },
-    { name: "Njabulo Zulu", role: "Documentation & Research" },
-  ];
-
-  return (
+const Home = () => (
     <Layout
       title="Home"
       headerRight={<div className="hidden sm:block"><Button to="create" label="Get Started" /></div>}
@@ -110,7 +98,7 @@ const Home = () => {
         <div className="relative overflow-hidden">
           {/* Scrolling content */}
           <div className="flex space-x-4 w-max animate-infinite-scroll">
-            {[...contributors, ...contributors].map((contributor, index) => (
+            {[...CONTRIBUTORS, ...CONTRIBUTORS].map((contributor, index) => (
               <div
                 key={index}
                 className="inline-block p-4 rounded-lg text-center transition"
@@ -130,6 +118,5 @@ const Home = () => {
       <Footer />
     </Layout>
   );
-};
 
 export default Home;
