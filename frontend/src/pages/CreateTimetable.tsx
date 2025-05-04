@@ -3,7 +3,14 @@ import Layout from "./Layout";
 import { Button } from "../components";
 import { useNavigate } from "react-router-dom";
 import { useRouteGuard } from "../contexts";
-import { API_URL, LECTURERS_KEY, PROGRAMMES_KEY } from "../constants";
+import {
+  API_URL,
+  DUMMY_LECTURERS,
+  DUMMY_PROGRAMMES,
+  LECTURERS_KEY,
+  PROGRAMMES_KEY,
+} from "../constants";
+import { isDev } from "../env";
 
 const CreateTimetable = () => {
   const navigate = useNavigate();
@@ -22,15 +29,20 @@ const CreateTimetable = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    const savedLecturers = sessionStorage.getItem(LECTURERS_KEY);
-    const savedProgrammes = sessionStorage.getItem(PROGRAMMES_KEY);
+    if (isDev) {
+      setLecturers(DUMMY_LECTURERS);
+      setProgrammes(DUMMY_PROGRAMMES);
 
-    if (savedLecturers) {
-      setLecturers(JSON.parse(savedLecturers));
-    }
+    } else {
+      const savedLecturers = sessionStorage.getItem(LECTURERS_KEY);
+      if (savedLecturers) {
+        setLecturers(JSON.parse(savedLecturers));
+      }
 
-    if (savedProgrammes) {
-      setProgrammes(JSON.parse(savedProgrammes));
+      const savedProgrammes = sessionStorage.getItem(PROGRAMMES_KEY);
+      if (savedProgrammes) {
+        setProgrammes(JSON.parse(savedProgrammes));
+      }
     }
   }, []);
 
