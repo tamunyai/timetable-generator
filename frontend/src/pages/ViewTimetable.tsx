@@ -3,9 +3,10 @@ import Layout from "./Layout";
 import { Button, FileDownIcon } from "../components";
 import { useRouteGuard } from "../contexts";
 import { useNavigate } from "react-router-dom";
-import { DUMMY_TIMETABLE_DATA, TIMETABLE_KEY } from "../constants";
+import { TIMETABLE_KEY } from "../constants";
 import { loadFromSession } from "../utils";
 import { isDev } from "../env";
+import { DUMMY_TIMETABLE_DATA } from "../data";
 
 const ViewTimetable: React.FC = () => {
   const navigate = useNavigate();

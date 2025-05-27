@@ -1,6 +1,5 @@
 import React from "react";
-import { Button } from "./Button";
-import { AlertIcon } from "./Icons";
+import { Button, AlertIcon } from "../ui";
 
 interface ErrorModalProps {
   message: string;

@@ -1,5 +1,5 @@
 import React from "react";
-import { GitHubIcon } from "./Icons";
+import { GitHubIcon } from "../ui";
 
 export const Footer: React.FC = () => {
   return (

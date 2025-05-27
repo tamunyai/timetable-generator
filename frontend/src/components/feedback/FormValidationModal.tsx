@@ -1,12 +1,12 @@
 import React from "react";
-import { Button } from "./Button";
+import { Button } from "../ui";
 
-interface ValidationModalProps {
+interface FormValidationModalProps {
   messages: string[];
   onClose: () => void;
 }
 
-export const ValidationModal: React.FC<ValidationModalProps> = ({
+export const FormValidationModal: React.FC<FormValidationModalProps> = ({
   messages,
   onClose,
 }) => (

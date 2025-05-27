@@ -1,5 +1,5 @@
 import React from "react";
-import { LoaderIcon } from "./Icons";
+import { LoaderIcon } from "../ui";
 
 export const LoadingOverlay: React.FC = () => (
   <div className="z-50 fixed inset-0 flex flex-col justify-center items-center bg-black/50 backdrop-blur-sm text-gray-300">

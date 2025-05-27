@@ -4,7 +4,7 @@ import {
   Button,
   ErrorModal,
   LoadingOverlay,
-  ValidationModal,
+  FormValidationModal,
   HelpIcon,
   PlusIcon,
   TrashIcon,
@@ -13,8 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { useRouteGuard } from "../contexts";
 import {
   API_URL,
-  DUMMY_LECTURERS,
-  DUMMY_PROGRAMMES,
   LECTURERS_KEY,
   PROGRAMMES_KEY,
   TIMETABLE_KEY,
@@ -25,6 +23,7 @@ import {
   saveToSession,
   validateTimetableForm,
 } from "../utils";
+import { DUMMY_LECTURERS, DUMMY_PROGRAMMES } from "../data";
 
 const CreateTimetable = () => {
   const navigate = useNavigate();
@@ -444,7 +443,7 @@ const CreateTimetable = () => {
       {isLoading && <LoadingOverlay />}
 
       {isModalVisible && (
-        <ValidationModal
+        <FormValidationModal
           messages={errors}
           onClose={() => setIsModalVisible(false)}
         />
